@@ -4,7 +4,8 @@ import { ArrowRight, Coffee, Leaf, Sparkles, Wifi, Users } from "lucide-react";
 import heroImg from "@/assets/hero-tea.jpg";
 import { SectionTitle } from "@/components/SectionTitle";
 import { MenuCard } from "@/components/MenuCard";
-import { MENU, CAFE_IMAGES, SITE } from "@/lib/site";
+import { CAFE_IMAGES, SITE } from "@/lib/site";
+import { useMenuItems } from "@/lib/dataHooks";
 
 export const Route = createFileRoute("/")({
   head: () => ({
@@ -29,7 +30,8 @@ const features = [
 ];
 
 function Home() {
-  const featured = MENU.filter((m) => m.featured);
+  const { items } = useMenuItems();
+  const featured = items.filter((m) => m.featured).slice(0, 4);
 
   return (
     <>
@@ -146,7 +148,17 @@ function Home() {
           />
           <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6">
             {featured.map((item, i) => (
-              <MenuCard key={item.name} item={item} index={i} />
+              <MenuCard
+                key={item.id}
+                item={{
+                  name: item.name,
+                  description: item.description,
+                  image: item.image_url,
+                  price: item.price,
+                  show_price: item.show_price,
+                }}
+                index={i}
+              />
             ))}
           </div>
           <div className="mt-12 text-center">
