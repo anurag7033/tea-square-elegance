@@ -652,59 +652,80 @@ function GalleryAdmin() {
         </div>
       )}
 
-      <style>{`
-        .input {
-          width: 100%;
-          background: color-mix(in oklch, var(--forest-light) 60%, transparent);
-          border: 1px solid color-mix(in oklch, var(--gold) 60%, transparent);
-          border-radius: 0.5rem;
-          padding: 0.5rem 0.75rem;
-          font-size: 0.875rem;
-          color: var(--foreground);
-          outline: none;
-        }
-        .input:focus {
-          border-color: var(--gold);
-          box-shadow: 0 0 0 1px color-mix(in oklch, var(--gold) 40%, transparent);
-        }
-        .input[type="checkbox"] {
-          appearance: none;
-          width: 1rem;
-          height: 1rem;
-          border: 1px solid color-mix(in oklch, var(--gold) 60%, transparent);
-          border-radius: 0.25rem;
-          background: color-mix(in oklch, var(--forest-light) 60%, transparent);
-          cursor: pointer;
-          display: inline-block;
-          vertical-align: middle;
-          padding: 0;
-          position: relative;
-        }
-        .input[type="checkbox"]:checked {
-          background: var(--gold);
-          border-color: var(--gold);
-        }
-        .input[type="checkbox"]:checked::after {
-          content: "";
-          position: absolute;
-          left: 3px;
-          top: 0px;
-          width: 5px;
-          height: 9px;
-          border: solid var(--background);
-          border-width: 0 2px 2px 0;
-          transform: rotate(45deg);
-        }
-        select.input {
-          background-image: url("data:image/svg+xml,%3csvg xmlns='http://www.w3.org/2000/svg' fill='none' viewBox='0 0 20 20'%3e%3cpath stroke='%23D4AF37' stroke-linecap='round' stroke-linejoin='round' stroke-width='1.5' d='M6 8l4 4 4-4'/%3e%3c/svg%3e");
-          background-position: right 0.5rem center;
-          background-repeat: no-repeat;
-          background-size: 1.5em 1.5em;
-          padding-right: 2.5rem;
-          -webkit-appearance: none;
-          appearance: none;
-        }
-      `}</style>
     </div>
   );
 }
+
+function AdminStyles() {
+  return (
+    <style>{`
+      .input {
+        width: 100%;
+        background: #0B2A1E;
+        border: 1px solid #C8A24D;
+        border-radius: 0.5rem;
+        padding: 0.55rem 0.75rem;
+        font-size: 0.875rem;
+        color: #ffffff;
+        outline: none;
+        transition: box-shadow 0.2s, border-color 0.2s;
+      }
+      .input::placeholder { color: #B8B8B8; }
+      .input:hover { border-color: #E0BE5E; }
+      .input:focus {
+        border-color: #E0BE5E;
+        box-shadow: 0 0 0 3px rgba(200, 162, 77, 0.25);
+      }
+      select.input {
+        background-color: #0B2A1E;
+        background-image: url("data:image/svg+xml,%3csvg xmlns='http://www.w3.org/2000/svg' fill='none' viewBox='0 0 20 20'%3e%3cpath stroke='%23C8A24D' stroke-linecap='round' stroke-linejoin='round' stroke-width='1.5' d='M6 8l4 4 4-4'/%3e%3c/svg%3e");
+        background-position: right 0.5rem center;
+        background-repeat: no-repeat;
+        background-size: 1.5em 1.5em;
+        padding-right: 2.5rem;
+        -webkit-appearance: none;
+        appearance: none;
+        color: #ffffff;
+      }
+      select.input option {
+        background-color: #0B2A1E;
+        color: #ffffff;
+      }
+      select.input option:checked,
+      select.input option:hover {
+        background: linear-gradient(#C8A24D, #C8A24D);
+        color: #0B2A1E;
+      }
+      .input[type="checkbox"] {
+        appearance: none;
+        width: 1rem;
+        height: 1rem;
+        border: 1px solid #C8A24D;
+        border-radius: 0.25rem;
+        background: #0B2A1E;
+        cursor: pointer;
+        display: inline-block;
+        vertical-align: middle;
+        padding: 0;
+        position: relative;
+        flex-shrink: 0;
+      }
+      .input[type="checkbox"]:checked {
+        background: #C8A24D;
+        border-color: #C8A24D;
+      }
+      .input[type="checkbox"]:checked::after {
+        content: "";
+        position: absolute;
+        left: 3px;
+        top: 0px;
+        width: 5px;
+        height: 9px;
+        border: solid #0B2A1E;
+        border-width: 0 2px 2px 0;
+        transform: rotate(45deg);
+      }
+    `}</style>
+  );
+}
+
