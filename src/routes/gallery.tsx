@@ -3,7 +3,7 @@ import { useState } from "react";
 import { motion, AnimatePresence } from "framer-motion";
 import { X } from "lucide-react";
 import { SectionTitle } from "@/components/SectionTitle";
-import { CAFE_IMAGES } from "@/lib/site";
+import { useGalleryImages } from "@/lib/dataHooks";
 
 export const Route = createFileRoute("/gallery")({
   head: () => ({
@@ -20,7 +20,7 @@ export const Route = createFileRoute("/gallery")({
 
 function Gallery() {
   const [lightbox, setLightbox] = useState<string | null>(null);
-  const images = [...CAFE_IMAGES, ...CAFE_IMAGES]; // double up for a fuller grid
+  const { items, loading } = useGalleryImages();
 
   return (
     <div className="section-pad">
@@ -31,26 +31,30 @@ function Gallery() {
           subtitle="Step into our world of warm lights, golden cups and quiet conversations."
         />
 
-        <div className="columns-1 sm:columns-2 lg:columns-3 gap-4 [column-fill:_balance]">
-          {images.map((src, i) => (
-            <motion.button
-              key={`${src}-${i}`}
-              initial={{ opacity: 0, y: 20 }}
-              whileInView={{ opacity: 1, y: 0 }}
-              viewport={{ once: true }}
-              transition={{ duration: 0.4, delay: (i % 6) * 0.05 }}
-              onClick={() => setLightbox(src)}
-              className="mb-4 block w-full overflow-hidden rounded-2xl border border-gold/15 hover:border-gold/40 transition group"
-            >
-              <img
-                src={src}
-                alt={`Tea Square Cafe ${i + 1}`}
-                loading="lazy"
-                className="w-full h-auto object-cover transition-transform duration-700 group-hover:scale-105"
-              />
-            </motion.button>
-          ))}
-        </div>
+        {loading ? (
+          <p className="text-center text-muted-foreground py-20">Loading…</p>
+        ) : (
+          <div className="columns-1 sm:columns-2 lg:columns-3 gap-4 [column-fill:_balance]">
+            {items.map((img, i) => (
+              <motion.button
+                key={img.id}
+                initial={{ opacity: 0, y: 20 }}
+                whileInView={{ opacity: 1, y: 0 }}
+                viewport={{ once: true }}
+                transition={{ duration: 0.4, delay: (i % 6) * 0.05 }}
+                onClick={() => setLightbox(img.image_url)}
+                className="mb-4 block w-full overflow-hidden rounded-2xl border border-gold/15 hover:border-gold/40 transition group"
+              >
+                <img
+                  src={img.image_url}
+                  alt={img.caption ?? `Tea Square Cafe ${i + 1}`}
+                  loading="lazy"
+                  className="w-full h-auto object-cover transition-transform duration-700 group-hover:scale-105"
+                />
+              </motion.button>
+            ))}
+          </div>
+        )}
       </div>
 
       <AnimatePresence>

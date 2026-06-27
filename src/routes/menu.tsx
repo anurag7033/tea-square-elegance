@@ -3,7 +3,7 @@ import { useMemo, useState } from "react";
 import { Search } from "lucide-react";
 import { SectionTitle } from "@/components/SectionTitle";
 import { MenuCard } from "@/components/MenuCard";
-import { MENU, MENU_CATEGORIES } from "@/lib/site";
+import { useMenuItems } from "@/lib/dataHooks";
 
 export const Route = createFileRoute("/menu")({
   head: () => ({
@@ -19,16 +19,22 @@ export const Route = createFileRoute("/menu")({
 });
 
 function MenuPage() {
+  const { items, loading } = useMenuItems();
   const [query, setQuery] = useState("");
   const [cat, setCat] = useState<string>("All");
 
+  const categories = useMemo(
+    () => ["All", ...Array.from(new Set(items.map((i) => i.category)))],
+    [items],
+  );
+
   const filtered = useMemo(() => {
-    return MENU.filter((m) => {
+    return items.filter((m) => {
       const matchCat = cat === "All" || m.category === cat;
       const matchQuery = m.name.toLowerCase().includes(query.toLowerCase());
       return matchCat && matchQuery;
     });
-  }, [query, cat]);
+  }, [query, cat, items]);
 
   return (
     <div className="section-pad">
@@ -39,7 +45,6 @@ function MenuPage() {
           subtitle="A handpicked selection of chai, bites and comfort meals — made fresh, served warm."
         />
 
-        {/* Controls */}
         <div className="flex flex-col md:flex-row gap-4 items-stretch md:items-center justify-between mb-10">
           <div className="relative md:w-80">
             <Search size={16} className="absolute left-3 top-1/2 -translate-y-1/2 text-gold/70" />
@@ -52,7 +57,7 @@ function MenuPage() {
             />
           </div>
           <div className="flex flex-wrap gap-2">
-            {MENU_CATEGORIES.map((c) => (
+            {categories.map((c) => (
               <button
                 key={c}
                 onClick={() => setCat(c)}
@@ -68,12 +73,24 @@ function MenuPage() {
           </div>
         </div>
 
-        {filtered.length === 0 ? (
+        {loading ? (
+          <p className="text-center text-muted-foreground py-20">Loading menu…</p>
+        ) : filtered.length === 0 ? (
           <p className="text-center text-muted-foreground py-20">No items match your search.</p>
         ) : (
           <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-6">
             {filtered.map((item, i) => (
-              <MenuCard key={item.name} item={item} index={i} />
+              <MenuCard
+                key={item.id}
+                item={{
+                  name: item.name,
+                  description: item.description,
+                  image: item.image_url,
+                  price: item.price,
+                  show_price: item.show_price,
+                }}
+                index={i}
+              />
             ))}
           </div>
         )}
