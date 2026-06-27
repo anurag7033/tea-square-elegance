@@ -80,7 +80,6 @@ function AdminPage() {
 }
 
 function LoginForm() {
-  const [mode, setMode] = useState<"login" | "signup">("login");
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const [err, setErr] = useState<string | null>(null);
@@ -91,18 +90,8 @@ function LoginForm() {
     setErr(null);
     setBusy(true);
     try {
-      if (mode === "login") {
-        const { error } = await supabase.auth.signInWithPassword({ email, password });
-        if (error) throw error;
-      } else {
-        const { error } = await supabase.auth.signUp({
-          email,
-          password,
-          options: { emailRedirectTo: `${window.location.origin}/admin` },
-        });
-        if (error) throw error;
-        setErr("Account created. If email confirmation is required, please verify, then sign in.");
-      }
+      const { error } = await supabase.auth.signInWithPassword({ email, password });
+      if (error) throw error;
     } catch (e: any) {
       setErr(e.message ?? "Something went wrong");
     } finally {
@@ -149,16 +138,9 @@ function LoginForm() {
             <p className="text-xs text-red-300 bg-red-500/10 border border-red-500/30 rounded-md px-3 py-2">{err}</p>
           )}
           <button type="submit" disabled={busy} className="btn-gold w-full disabled:opacity-60">
-            {busy ? "Please wait…" : mode === "login" ? "Sign In" : "Create Account"}
+            {busy ? "Please wait…" : "Sign In"}
           </button>
         </form>
-
-        <button
-          onClick={() => setMode(mode === "login" ? "signup" : "login")}
-          className="mt-5 text-xs text-gold/80 hover:text-gold w-full text-center"
-        >
-          {mode === "login" ? "Need an account? Sign up" : "Already have an account? Sign in"}
-        </button>
       </div>
     </div>
   );
