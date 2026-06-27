@@ -131,7 +131,7 @@ function LoginForm() {
               required
               value={email}
               onChange={(e) => setEmail(e.target.value)}
-              className="mt-1 w-full bg-forest-light/60 border border-gold/20 rounded-lg px-3 py-2.5 text-sm focus:outline-none focus:border-gold"
+              className="mt-1 w-full bg-forest-light/60 border border-gold/60 rounded-lg px-3 py-2.5 text-sm focus:outline-none focus:border-gold focus:ring-1 focus:ring-gold/40"
             />
           </div>
           <div>
@@ -142,7 +142,7 @@ function LoginForm() {
               minLength={6}
               value={password}
               onChange={(e) => setPassword(e.target.value)}
-              className="mt-1 w-full bg-forest-light/60 border border-gold/20 rounded-lg px-3 py-2.5 text-sm focus:outline-none focus:border-gold"
+              className="mt-1 w-full bg-forest-light/60 border border-gold/60 rounded-lg px-3 py-2.5 text-sm focus:outline-none focus:border-gold focus:ring-1 focus:ring-gold/40"
             />
           </div>
           {err && (
