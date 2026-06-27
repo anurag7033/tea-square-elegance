@@ -500,6 +500,7 @@ function MenuForm({
                 type="checkbox"
                 checked={showPrice}
                 onChange={(e) => setShowPrice(e.target.checked)}
+                className="input"
               />
               Show price on site
             </label>
@@ -508,6 +509,7 @@ function MenuForm({
                 type="checkbox"
                 checked={featured}
                 onChange={(e) => setFeatured(e.target.checked)}
+                className="input"
               />
               Featured on home
             </label>
