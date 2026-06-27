@@ -163,19 +163,29 @@ function NotAdminScreen({ email }: { email: string }) {
   );
 }
 
+const ALLOWED_TYPES = ["image/jpeg", "image/jpg", "image/png", "image/webp"];
+const MAX_SIZE = 5 * 1024 * 1024;
+
 async function uploadAndGetUrl(bucket: string, file: File): Promise<string> {
-  const ext = file.name.split(".").pop() ?? "jpg";
+  if (!ALLOWED_TYPES.includes(file.type)) {
+    throw new Error("Invalid file type. Use JPG, PNG, or WEBP.");
+  }
+  if (file.size > MAX_SIZE) {
+    throw new Error("File too large. Max 5MB.");
+  }
+  const ext = (file.name.split(".").pop() ?? "jpg").toLowerCase();
   const path = `${crypto.randomUUID()}.${ext}`;
   const { error } = await supabase.storage.from(bucket).upload(path, file, {
     cacheControl: "31536000",
     upsert: false,
     contentType: file.type,
   });
-  if (error) throw error;
+  if (error) throw new Error(error.message || "Upload failed");
   const { data, error: sErr } = await supabase.storage.from(bucket).createSignedUrl(path, SIGNED_EXPIRY);
-  if (sErr || !data) throw sErr ?? new Error("Could not create signed URL");
+  if (sErr || !data) throw new Error(sErr?.message || "Could not create signed URL");
   return data.signedUrl;
 }
+
 
 function Dashboard() {
   const [tab, setTab] = useState<"menu" | "gallery">("menu");
