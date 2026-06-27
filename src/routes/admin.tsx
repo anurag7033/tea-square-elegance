@@ -668,7 +668,59 @@ function GalleryAdmin() {
         </div>
       )}
 
-      <style>{`.input{width:100%;background:color-mix(in oklch, var(--forest-light) 60%, transparent);border:1px solid color-mix(in oklch, var(--gold) 20%, transparent);border-radius:0.5rem;padding:0.5rem 0.75rem;font-size:0.875rem;color:var(--foreground);outline:none}.input:focus{border-color:var(--gold)}`}</style>
+      <style>{`
+        .input {
+          width: 100%;
+          background: color-mix(in oklch, var(--forest-light) 60%, transparent);
+          border: 1px solid color-mix(in oklch, var(--gold) 60%, transparent);
+          border-radius: 0.5rem;
+          padding: 0.5rem 0.75rem;
+          font-size: 0.875rem;
+          color: var(--foreground);
+          outline: none;
+        }
+        .input:focus {
+          border-color: var(--gold);
+          box-shadow: 0 0 0 1px color-mix(in oklch, var(--gold) 40%, transparent);
+        }
+        .input[type="checkbox"] {
+          appearance: none;
+          width: 1rem;
+          height: 1rem;
+          border: 1px solid color-mix(in oklch, var(--gold) 60%, transparent);
+          border-radius: 0.25rem;
+          background: color-mix(in oklch, var(--forest-light) 60%, transparent);
+          cursor: pointer;
+          display: inline-block;
+          vertical-align: middle;
+          padding: 0;
+          position: relative;
+        }
+        .input[type="checkbox"]:checked {
+          background: var(--gold);
+          border-color: var(--gold);
+        }
+        .input[type="checkbox"]:checked::after {
+          content: "";
+          position: absolute;
+          left: 3px;
+          top: 0px;
+          width: 5px;
+          height: 9px;
+          border: solid var(--background);
+          border-width: 0 2px 2px 0;
+          transform: rotate(45deg);
+        }
+        select.input {
+          background-image: url("data:image/svg+xml,%3csvg xmlns='http://www.w3.org/2000/svg' fill='none' viewBox='0 0 20 20'%3e%3cpath stroke='%23D4AF37' stroke-linecap='round' stroke-linejoin='round' stroke-width='1.5' d='M6 8l4 4 4-4'/%3e%3c/svg%3e");
+          background-position: right 0.5rem center;
+          background-repeat: no-repeat;
+          background-size: 1.5em 1.5em;
+          padding-right: 2.5rem;
+          -webkit-appearance: none;
+          appearance: none;
+        }
+      `}</style>
     </div>
   );
 }
