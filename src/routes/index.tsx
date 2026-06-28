@@ -1,6 +1,6 @@
 import { createFileRoute, Link } from "@tanstack/react-router";
 import { motion } from "framer-motion";
-import { ArrowRight, Coffee, Leaf, Sparkles, Wifi, Users, Phone, Mail, MapPin, Instagram, Star, ExternalLink } from "lucide-react";
+import { ArrowRight, Coffee, Leaf, Sparkles, Wifi, Users, Heart, Phone, Mail, MapPin, Instagram, Star, ExternalLink } from "lucide-react";
 import heroImg from "@/assets/hero-tea.jpg";
 import { SectionTitle } from "@/components/SectionTitle";
 import { MenuCard } from "@/components/MenuCard";
