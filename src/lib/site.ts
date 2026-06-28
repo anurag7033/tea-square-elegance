@@ -1,6 +1,4 @@
-import logoAsset from "@/assets/logo.asset.json";
-
-export const LOGO_URL = logoAsset.url;
+export const LOGO_URL = "https://res.cloudinary.com/daiev9gkn/image/upload/v1782622893/WhatsApp_Image_2026-06-24_at_1.11.28_PM_t9vyuj.jpg";
 
 export const SITE = {
   name: "Tea Square Cafe",
