@@ -230,15 +230,10 @@ function Home() {
       <section className="py-16">
         <div className="mx-auto max-w-6xl px-6 lg:px-8">
           <div className="rounded-2xl border border-gold/20 p-8 grid grid-cols-2 md:grid-cols-4 gap-6 bg-card/60">
-            {[
-              { n: "25+", l: "Premium Teas" },
-              { n: "10K+", l: "Happy Customers" },
-              { n: "35K+", l: "Cups Served" },
-              { n: "2", l: "Outlet Branches" },
-            ].map((s) => (
-              <div key={s.l} className="text-center">
-                <div className="font-display text-4xl gold-gradient-text">{s.n}</div>
-                <div className="mt-1 text-xs tracking-[0.2em] uppercase text-muted-foreground">{s.l}</div>
+            {stats.map((s) => (
+              <div key={s.id} className="text-center">
+                <div className="font-display text-4xl gold-gradient-text">{s.value}</div>
+                <div className="mt-1 text-xs tracking-[0.2em] uppercase text-muted-foreground">{s.label}</div>
               </div>
             ))}
           </div>
