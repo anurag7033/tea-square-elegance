@@ -26,6 +26,7 @@ const features = [
   { icon: Coffee, label: "Cozy Ambience" },
   { icon: Sparkles, label: "Fresh & Hygienic" },
   { icon: Users, label: "Friendly Staff" },
+  { icon: Heart, label: "Couple Friendly" },
   { icon: Wifi, label: "Free Wi-Fi & Music" },
 ];
 
