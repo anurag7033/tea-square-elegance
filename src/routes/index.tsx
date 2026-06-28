@@ -32,6 +32,7 @@ const features = [
 
 function Home() {
   const { items } = useMenuItems();
+  const { items: stats } = useSiteStats();
   const featured = items.filter((m) => m.featured).slice(0, 4);
 
   return (
