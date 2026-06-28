@@ -96,3 +96,41 @@ export function useGalleryImages() {
 
   return { items: items ?? [], loading };
 }
+
+export type DBSiteStat = {
+  id: string;
+  key: string;
+  value: string;
+  label: string;
+  sort_order: number;
+};
+
+const FALLBACK_STATS: DBSiteStat[] = [
+  { id: "s1", key: "premium_teas", value: "25+", label: "Premium Teas", sort_order: 1 },
+  { id: "s2", key: "happy_customers", value: "10K+", label: "Happy Customers", sort_order: 2 },
+  { id: "s3", key: "cups_served", value: "35K+", label: "Cups Served", sort_order: 3 },
+  { id: "s4", key: "outlet_branches", value: "2", label: "Outlet Branches", sort_order: 4 },
+];
+
+export function useSiteStats() {
+  const [items, setItems] = useState<DBSiteStat[] | null>(null);
+  const [loading, setLoading] = useState(true);
+
+  useEffect(() => {
+    let alive = true;
+    supabase
+      .from("site_stats" as any)
+      .select("*")
+      .order("sort_order", { ascending: true })
+      .then(({ data }: any) => {
+        if (!alive) return;
+        setItems(data && data.length > 0 ? (data as DBSiteStat[]) : FALLBACK_STATS);
+        setLoading(false);
+      });
+    return () => {
+      alive = false;
+    };
+  }, []);
+
+  return { items: items ?? FALLBACK_STATS, loading };
+}
