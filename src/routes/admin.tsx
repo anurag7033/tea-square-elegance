@@ -188,7 +188,7 @@ async function uploadAndGetUrl(bucket: string, file: File): Promise<string> {
 
 
 function Dashboard() {
-  const [tab, setTab] = useState<"menu" | "gallery">("menu");
+  const [tab, setTab] = useState<"menu" | "gallery" | "stats">("menu");
   return (
     <div className="min-h-screen bg-background text-foreground">
       <AdminStyles />
@@ -204,7 +204,7 @@ function Dashboard() {
           </button>
         </div>
         <div className="mx-auto max-w-7xl px-6 flex gap-2">
-          {(["menu", "gallery"] as const).map((t) => (
+          {(["menu", "gallery", "stats"] as const).map((t) => (
             <button
               key={t}
               onClick={() => setTab(t)}
@@ -219,11 +219,111 @@ function Dashboard() {
       </header>
 
       <main className="mx-auto max-w-7xl px-6 py-10">
-        {tab === "menu" ? <MenuAdmin /> : <GalleryAdmin />}
+        {tab === "menu" && <MenuAdmin />}
+        {tab === "gallery" && <GalleryAdmin />}
+        {tab === "stats" && <StatsAdmin />}
       </main>
     </div>
   );
 }
+
+/* -------------------- STATS ADMIN -------------------- */
+
+type StatRow = { id: string; key: string; value: string; label: string; sort_order: number };
+
+function StatsAdmin() {
+  const [rows, setRows] = useState<StatRow[]>([]);
+  const [loading, setLoading] = useState(true);
+  const [savingId, setSavingId] = useState<string | null>(null);
+  const [msg, setMsg] = useState<string | null>(null);
+
+  async function load() {
+    setLoading(true);
+    const { data } = await supabase
+      .from("site_stats" as any)
+      .select("*")
+      .order("sort_order", { ascending: true });
+    setRows(((data as any) ?? []) as StatRow[]);
+    setLoading(false);
+  }
+  useEffect(() => { load(); }, []);
+
+  async function save(r: StatRow) {
+    setSavingId(r.id);
+    setMsg(null);
+    const { error } = await supabase
+      .from("site_stats" as any)
+      .update({ value: r.value, label: r.label, sort_order: r.sort_order })
+      .eq("id", r.id);
+    setSavingId(null);
+    if (error) setMsg(error.message);
+    else setMsg("Saved ✓");
+  }
+
+  async function addRow() {
+    const key = `stat_${Date.now()}`;
+    const { error } = await supabase
+      .from("site_stats" as any)
+      .insert({ key, value: "0", label: "New Stat", sort_order: (rows.at(-1)?.sort_order ?? 0) + 1 });
+    if (error) setMsg(error.message);
+    else load();
+  }
+
+  async function remove(id: string) {
+    if (!confirm("Delete this stat?")) return;
+    const { error } = await supabase.from("site_stats" as any).delete().eq("id", id);
+    if (error) setMsg(error.message);
+    else load();
+  }
+
+  return (
+    <div className="space-y-6">
+      <div className="flex items-center justify-between">
+        <div>
+          <h2 className="font-display text-2xl text-gold">Homepage Stats</h2>
+          <p className="text-sm text-foreground/60">Edit the numbers shown on the homepage strip.</p>
+        </div>
+        <button onClick={addRow} className="btn-outline-gold !py-2 !px-4"><Plus size={14}/> Add Stat</button>
+      </div>
+
+      {msg && <p className="text-sm text-gold">{msg}</p>}
+
+      {loading ? (
+        <p className="text-foreground/60">Loading…</p>
+      ) : (
+        <div className="grid gap-4">
+          {rows.map((r) => (
+            <div key={r.id} className="rounded-xl border border-gold/30 bg-forest/40 p-4 grid md:grid-cols-[100px_1fr_1fr_80px_auto_auto] gap-3 items-end">
+              <label className="block">
+                <span className="block text-[10px] tracking-[0.2em] uppercase text-gold/70 mb-1">Order</span>
+                <input className="input" type="number" value={r.sort_order}
+                  onChange={(e) => setRows((rs) => rs.map((x) => x.id === r.id ? { ...x, sort_order: Number(e.target.value) } : x))} />
+              </label>
+              <label className="block">
+                <span className="block text-[10px] tracking-[0.2em] uppercase text-gold/70 mb-1">Value</span>
+                <input className="input" value={r.value}
+                  onChange={(e) => setRows((rs) => rs.map((x) => x.id === r.id ? { ...x, value: e.target.value } : x))} />
+              </label>
+              <label className="block">
+                <span className="block text-[10px] tracking-[0.2em] uppercase text-gold/70 mb-1">Label</span>
+                <input className="input" value={r.label}
+                  onChange={(e) => setRows((rs) => rs.map((x) => x.id === r.id ? { ...x, label: e.target.value } : x))} />
+              </label>
+              <div className="text-[10px] tracking-[0.2em] uppercase text-foreground/40 truncate" title={r.key}>{r.key}</div>
+              <button onClick={() => save(r)} disabled={savingId === r.id} className="btn-outline-gold !py-2 !px-4">
+                {savingId === r.id ? "Saving…" : "Save"}
+              </button>
+              <button onClick={() => remove(r.id)} className="btn-outline-gold !py-2 !px-3" title="Delete">
+                <Trash2 size={14}/>
+              </button>
+            </div>
+          ))}
+        </div>
+      )}
+    </div>
+  );
+}
+
 
 /* -------------------- MENU ADMIN -------------------- */
 
