@@ -39,6 +39,7 @@ type GalleryRow = {
 };
 
 function AdminPage() {
+  useEffect(() => { window.scrollTo(0, 0); }, []);
   const [session, setSession] = useState<Session | null>(null);
   const [isAdmin, setIsAdmin] = useState<boolean | null>(null);
   const [ready, setReady] = useState(false);
