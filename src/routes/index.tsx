@@ -5,7 +5,7 @@ import heroImg from "@/assets/hero-tea.jpg";
 import { SectionTitle } from "@/components/SectionTitle";
 import { MenuCard } from "@/components/MenuCard";
 import { CAFE_IMAGES, SITE } from "@/lib/site";
-import { useMenuItems } from "@/lib/dataHooks";
+import { useMenuItems, useSiteStats } from "@/lib/dataHooks";
 
 export const Route = createFileRoute("/")({
   head: () => ({
