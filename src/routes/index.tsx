@@ -87,7 +87,7 @@ function Home() {
 
         {/* Feature strip */}
         <div className="relative mx-auto max-w-6xl px-6 lg:px-8 -mt-10 pb-10 z-10">
-          <div className="rounded-2xl border border-gold/25 bg-forest/80 backdrop-blur-md p-6 grid grid-cols-2 md:grid-cols-5 gap-4">
+          <div className="rounded-2xl border border-gold/25 bg-forest/80 backdrop-blur-md p-6 grid grid-cols-2 md:grid-cols-6 gap-4">
             {features.map((f) => (
               <div key={f.label} className="flex flex-col items-center text-center gap-2">
                 <f.icon className="text-gold" size={26} />
